@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="viewport" content="
+		user-scalable=no, 
+		initial-scale=1, 
+		maximum-scale=1, 
+		minimum-scale=1, 
+		width=device-width, 
+		height=device-height, 
+		target-densitydpi=device-dpi" />
+		<style>
+			body {
+				margin:0px;
+				top:0px;
+			}
+			button {
+				padding: 20px;
+				font-size:16px;
+			}
+			#compass {
+				max-width: 100%;
+
+			}
+			#needle {
+				position: relative; top:-425px; left:128px;
+			}
+		</style>
+        <title>Compass</title>
+		<script type="text/javascript" charset="utf-8">
+		var watchID = null;
+		
+		document.addEventListener("deviceready", onDeviceReady, false);
+		function onDeviceReady() {
+		};
+		function onSuccess(heading) {
+			$("#needle").rotate(heading.magneticHeading);
+			$("#compress_value").html(heading.magneticHeading);
+			//alert('Heading: ' + heading.magneticHeading);
+		};
+		function onError(compassError) {
+			alert('Compass Error: ' + compassError.code);
+		};
+		function getCurrentHeading(){
+			navigator.compass.getCurrentHeading(onSuccess, onError);
+		};
+		function startWatch() {
+			var options = { frequency: 100 };
+			watchID = navigator.compass.watchHeading(onSuccess, onError, options);
+		};
+		function stopWatch() {
+			if (watchID) {
+				navigator.compass.clearWatch(watchID);
+				watchID = null;
+			}
+		};
+		</script>
+    </head>
+    <body>
+		<img id="compress" src="img/compass_chinese.jpg" width="100%">
+		<div>
+			<button type="button" onclick="getCurrentHeading()">取方位值get heading</button>
+			<button type="button" onclick="startWatch()">持續取方位值get cont.</button>
+			<button type="button" onclick="stopWatch()">停止stop</button>
+		</div>
+		<img id="needle" src="img/compass-needle.png">
+		<div id="compress_value"></div>
+        <script type="text/javascript" src="phonegap.js"></script>
+		<script type="text/javascript" src="js/jquery.min.js"></script>
+		<script type="text/javascript" src="js/jQueryRotate.js"></script>
+    </body>
+</html>
